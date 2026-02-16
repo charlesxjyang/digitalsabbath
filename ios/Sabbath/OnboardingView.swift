@@ -1,7 +1,8 @@
 import SwiftUI
+import FamilyControls
 
 struct OnboardingView: View {
-    @ObservedObject var vpnManager: VPNManager
+    @ObservedObject var screenTimeManager: ScreenTimeManager
     @Binding var hasOnboarded: Bool
 
     @State private var step: OnboardingStep = .mission
@@ -10,7 +11,8 @@ struct OnboardingView: View {
 
     enum OnboardingStep {
         case mission
-        case permission
+        case pickApps
+        case done
     }
 
     var body: some View {
@@ -21,9 +23,11 @@ struct OnboardingView: View {
             case .mission:
                 missionView
                     .transition(.opacity)
-            case .permission:
-                permissionView
+            case .pickApps:
+                pickAppsView
                     .transition(.opacity)
+            case .done:
+                EmptyView()
             }
         }
         .animation(.easeInOut(duration: 0.4), value: step)
@@ -75,7 +79,7 @@ struct OnboardingView: View {
             Spacer()
 
             Button(action: {
-                step = .permission
+                step = .pickApps
             }) {
                 Text("I'm in")
                     .font(.system(size: 18, weight: .medium, design: .serif))
@@ -90,41 +94,41 @@ struct OnboardingView: View {
         }
     }
 
-    // MARK: - Step 2: Permission
+    // MARK: - Step 2: Pick Apps
 
-    private var permissionView: some View {
+    private var pickAppsView: some View {
         VStack(spacing: 0) {
             infoButton
 
             Spacer()
 
-            Text("One small step")
+            Text("Choose what to block")
                 .font(.system(size: 36, weight: .thin, design: .serif))
                 .foregroundColor(.black)
-                .padding(.bottom, 32)
+                .padding(.bottom, 16)
 
-            Text("On the day of Digital Sabbath, the app will block scrolling apps by filtering their network requests on your device.")
+            Text("Select the apps you want blocked on Digital Sabbath. You can change this anytime.")
                 .font(.system(size: 17, weight: .regular, design: .serif))
                 .foregroundColor(.black.opacity(0.65))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 40)
-                .padding(.bottom, 16)
+                .padding(.bottom, 32)
 
-            Text("Your data never leaves your device.")
-                .font(.system(size: 15, weight: .regular, design: .serif))
-                .foregroundColor(.black.opacity(0.4))
-                .multilineTextAlignment(.center)
-                .lineSpacing(4)
-                .padding(.horizontal, 40)
+            FamilyActivityPicker(selection: $screenTimeManager.activitySelection)
+                .frame(height: 300)
+                .padding(.horizontal, 20)
 
             Spacer()
 
             Button(action: {
                 isLoading = true
-                vpnManager.installAndEnable { success in
-                    isLoading = false
-                    if success {
-                        Task { await Self.registerJoin() }
+                Task {
+                    await screenTimeManager.requestAuthorization()
+                    screenTimeManager.saveSelection()
+                    screenTimeManager.scheduleAllSabbaths()
+                    await Self.registerJoin()
+                    await MainActor.run {
+                        isLoading = false
                         hasOnboarded = true
                     }
                 }
@@ -134,7 +138,7 @@ struct OnboardingView: View {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
                     } else {
-                        Text("Unlock Digital Sabbath")
+                        Text("Activate Digital Sabbath")
                             .font(.system(size: 18, weight: .medium, design: .serif))
                     }
                 }

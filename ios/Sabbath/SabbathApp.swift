@@ -1,21 +1,24 @@
 import SwiftUI
+import FamilyControls
 
 @main
 struct SabbathApp: App {
-    @StateObject private var vpnManager = VPNManager()
+    @StateObject private var screenTimeManager = ScreenTimeManager.shared
     @AppStorage("hasOnboarded") private var hasOnboarded = false
 
     var body: some Scene {
         WindowGroup {
             if hasOnboarded {
-                ContentView(vpnManager: vpnManager)
+                ContentView(screenTimeManager: screenTimeManager)
                     .onAppear {
-                        if SabbathSchedule.isSabbathActive() && !vpnManager.isConnected {
-                            vpnManager.startTunnel()
+                        screenTimeManager.loadSelection()
+                        if SabbathSchedule.isSabbathActive() {
+                            screenTimeManager.applyShieldsNow()
                         }
+                        screenTimeManager.scheduleAllSabbaths()
                     }
             } else {
-                OnboardingView(vpnManager: vpnManager, hasOnboarded: $hasOnboarded)
+                OnboardingView(screenTimeManager: screenTimeManager, hasOnboarded: $hasOnboarded)
             }
         }
     }

@@ -34,30 +34,30 @@ targets:
         GENERATE_INFOPLIST_FILE: NO
     attributes:
       SystemCapabilities:
-        com.apple.NetworkExtensions:
+        com.apple.FamilyControls:
           enabled: 1
         com.apple.ApplicationGroups.iOS:
           enabled: 1
     dependencies:
-      - target: PacketTunnel
+      - target: SabbathMonitor
 
-  PacketTunnel:
+  SabbathMonitor:
     type: app-extension
     platform: iOS
     sources:
-      - PacketTunnel
+      - SabbathMonitor
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.digitalsabbath.app.PacketTunnel
-        INFOPLIST_FILE: PacketTunnel/Info.plist
-        CODE_SIGN_ENTITLEMENTS: PacketTunnel/PacketTunnel.entitlements
+        PRODUCT_BUNDLE_IDENTIFIER: com.digitalsabbath.app.SabbathMonitor
+        INFOPLIST_FILE: SabbathMonitor/Info.plist
+        CODE_SIGN_ENTITLEMENTS: SabbathMonitor/SabbathMonitor.entitlements
         GENERATE_INFOPLIST_FILE: NO
         SKIP_INSTALL: YES
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: 1
     attributes:
       SystemCapabilities:
-        com.apple.NetworkExtensions:
+        com.apple.FamilyControls:
           enabled: 1
         com.apple.ApplicationGroups.iOS:
           enabled: 1
@@ -67,7 +67,7 @@ schemes:
     build:
       targets:
         Sabbath: all
-        PacketTunnel: all
+        SabbathMonitor: all
     run:
       config: Debug
       executable: Sabbath

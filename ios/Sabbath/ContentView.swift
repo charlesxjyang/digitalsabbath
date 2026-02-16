@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var vpnManager: VPNManager
+    @ObservedObject var screenTimeManager: ScreenTimeManager
     @State private var now = Date()
     @State private var showBlockedApps = false
     @State private var joinedCount: Int = max(1, UserDefaults.standard.integer(forKey: "joinedCount"))
