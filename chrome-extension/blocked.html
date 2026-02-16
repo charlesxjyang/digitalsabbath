@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Sabbath</title>
+  <link rel="stylesheet" href="blocked.css">
+</head>
+<body>
+  <main>
+    <div class="sun">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Rays -->
+        <g class="rays">
+          <line x1="100" y1="10" x2="100" y2="35" />
+          <line x1="100" y1="165" x2="100" y2="190" />
+          <line x1="10" y1="100" x2="35" y2="100" />
+          <line x1="165" y1="100" x2="190" y2="100" />
+          <line x1="36" y1="36" x2="54" y2="54" />
+          <line x1="146" y1="146" x2="164" y2="164" />
+          <line x1="164" y1="36" x2="146" y2="54" />
+          <line x1="54" y1="146" x2="36" y2="164" />
+          <!-- Short rays between main rays -->
+          <line x1="63" y1="18" x2="70" y2="39" />
+          <line x1="137" y1="18" x2="130" y2="39" />
+          <line x1="18" y1="63" x2="39" y2="70" />
+          <line x1="18" y1="137" x2="39" y2="130" />
+          <line x1="182" y1="63" x2="161" y2="70" />
+          <line x1="182" y1="137" x2="161" y2="130" />
+          <line x1="63" y1="182" x2="70" y2="161" />
+          <line x1="137" y1="182" x2="130" y2="161" />
+        </g>
+        <!-- Sun circle -->
+        <circle cx="100" cy="100" r="50" class="sun-circle" />
+      </svg>
+    </div>
+
+    <h1>Digital Sabbath</h1>
+    <p class="tagline">The longest day, spent offline.</p>
+    <p class="message">Go outside. Call a friend. Read a book.<br>The internet will be here tomorrow.</p>
+
+    <button class="what-is-this" onclick="document.getElementById('explanation').classList.toggle('visible')" aria-expanded="false" aria-controls="explanation">
+      What is this?
+    </button>
+
+    <div id="explanation" class="explanation">
+      <p>Digital Sabbath is a collective day offline. Once a year, on the summer solstice, we all log off together. No feeds. No notifications. Just the longest day of the year, lived in full.</p>
+      <p>Learn more at <strong>digitalsabbath.app</strong></p>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,130 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(170deg, #FFF8F0 0%, #FDEBD0 40%, #F9D89C 100%);
+  font-family: Georgia, "Times New Roman", serif;
+  color: #5B4636;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  text-align: center;
+  padding: 2rem;
+  max-width: 560px;
+}
+
+/* Sun SVG */
+.sun {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 2rem;
+  animation: spin 60s linear infinite;
+}
+
+.sun-circle {
+  fill: #F4A623;
+}
+
+.rays line {
+  stroke: #F4A623;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #4A3728;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  font-size: 1.3rem;
+  font-style: italic;
+  color: #8B6F47;
+  margin-bottom: 2rem;
+}
+
+.message {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #6B5744;
+  margin-bottom: 3rem;
+}
+
+/* What is this button */
+.what-is-this {
+  background: none;
+  border: none;
+  color: #B8956A;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+
+.what-is-this:hover {
+  color: #8B6F47;
+}
+
+/* Expandable explanation */
+.explanation {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.4s ease, margin 0.4s ease;
+  margin-top: 0;
+}
+
+.explanation.visible {
+  max-height: 300px;
+  opacity: 1;
+  margin-top: 1.5rem;
+}
+
+.explanation p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #8B6F47;
+  margin-bottom: 0.8rem;
+}
+
+.explanation p:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  .tagline {
+    font-size: 1.1rem;
+  }
+
+  .message {
+    font-size: 1rem;
+  }
+
+  .sun {
+    width: 100px;
+    height: 100px;
+  }
+}

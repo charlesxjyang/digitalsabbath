@@ -1,0 +1,7 @@
+name = "digital-sabbath-api"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "SABBATH_KV"
+id = "c171bccd27ab4ff094e63cc9e792ad1a"
