@@ -1,51 +1,54 @@
 # Digital Sabbath
 
-**The longest day, spent offline.**
+**June 21, 2026 — the longest day, spent offline.**
 
-A collective digital sabbath on the summer solstice. Everyone goes offline together. One day. One blacklist. No configuration. We block social media and gambling sites across every platform — iOS, Android, Chrome — so you can spend the longest day of the year in the real world.
+On the summer solstice, we all put down our phones together. One day. No doomscrolling. No algorithmic feeds. No gambling. No AI chatbots. Just the real world.
 
-## Sabbath Dates
+Digital Sabbath is an app that blocks distracting apps and websites for 24 hours on June 21, 2026. It works by filtering network requests on your device — your data never leaves your phone. When the day is over, everything goes back to normal.
 
-- **June 20, 2026** — Summer Solstice
+## What happens on June 21?
 
-## Blocked Sites
+At midnight on the summer solstice, Digital Sabbath activates. For the next 24 hours:
 
-| Site | Domain |
-|------|--------|
-| Instagram | instagram.com |
-| TikTok | tiktok.com |
-| Twitter/X | twitter.com, x.com |
-| Facebook | facebook.com |
-| Reddit | reddit.com |
-| Snapchat | snapchat.com |
-| Threads | threads.net |
-| Kalshi | kalshi.com |
-| Polymarket | polymarket.com |
-| YouTube | youtube.com *(optional)* |
+- **Social media feeds won't load** — Instagram, TikTok, Twitter/X, Facebook, Reddit, Snapchat, Threads, Bluesky
+- **Gambling sites won't load** — Kalshi, Polymarket
+- **AI chatbots won't load** — ChatGPT, Gemini, Claude
+- **Everything else works normally** — calls, texts, maps, music, banking, email
 
-## Repo Structure
+You can still open the apps — but their feeds return nothing. A quiet reminder to look up.
 
+## How it works
+
+### iOS
+
+A lightweight VPN runs entirely on your device. It intercepts DNS requests and returns empty responses for blocked domains. No traffic is sent to any server. No data is collected. It's local-only, privacy-first blocking.
+
+### Chrome Extension
+
+A Manifest V3 extension uses `declarativeNetRequest` to block the same domains in your browser. No background scripts, no data collection.
+
+## Blocked domains
+
+| Category | Sites |
+|----------|-------|
+| Social media | instagram.com, tiktok.com, twitter.com, x.com, facebook.com, reddit.com, snapchat.com, threads.net, bsky.app, bsky.social |
+| Gambling | kalshi.com, polymarket.com |
+| AI | chatgpt.com, openai.com, gemini.google.com, anthropic.com, claude.ai |
+
+YouTube is excluded by default but can be optionally blocked.
+
+## Getting started
+
+### iOS
+
+```bash
+cd ios/
+brew install xcodegen  # if not already installed
+xcodegen generate
+open Sabbath.xcodeproj
 ```
-digital-sabbath/
-├── ios/                  # iOS app (SwiftUI + Network Extension)
-├── android/              # Android app (planned)
-├── chrome-extension/     # Chrome extension (Manifest V3)
-├── web/                  # Landing page (planned)
-├── backend/              # Counter API (planned)
-└── media/                # Brand assets, flyers, screenshots
-```
 
-## Status
-
-| Component | Status |
-|-----------|--------|
-| iOS App | In progress |
-| Chrome Extension | Done |
-| Android App | Planned |
-| Landing Page | Planned |
-| Backend API | Planned |
-
-## Getting Started
+Build and run on your device (Cmd+R). The app requires a real device — the VPN extension doesn't work in the simulator.
 
 ### Chrome Extension
 
@@ -53,21 +56,51 @@ digital-sabbath/
 cd chrome-extension/
 ```
 
-Load as an unpacked extension in Chrome. See [chrome-extension/README.md](chrome-extension/README.md) for full instructions.
+1. Open `chrome://extensions`
+2. Enable Developer Mode
+3. Click "Load unpacked" and select the `chrome-extension/` directory
 
-### iOS App
+### Backend (Cloudflare Worker)
 
-Open `ios/Sabbath.xcodeproj` in Xcode.
+The backend is a simple counter that tracks how many people have joined. It runs on Cloudflare Workers with KV storage.
+
+```bash
+cd backend/
+npm install
+npx wrangler dev  # local development
+```
+
+## Repo structure
+
+```
+digitalsabbath/
+├── ios/                  # iOS app (SwiftUI + Network Extension)
+│   ├── Sabbath/          # Main app target
+│   └── PacketTunnel/     # VPN extension for DNS filtering
+├── backend/              # Cloudflare Worker (join counter API)
+├── chrome-extension/     # Chrome extension (Manifest V3)
+├── android/              # Android app (planned)
+├── web/                  # Landing page (planned)
+└── media/                # Brand assets
+```
+
+## Status
+
+| Component | Status |
+|-----------|--------|
+| iOS App | Working |
+| Chrome Extension | Working |
+| Backend API | Deployed |
+| Android App | Planned |
+| Landing Page | Planned |
 
 ## Contributing
 
 This is an open project. Ways to help:
 
-- **Code** — Pick a planned component and build it. Android and the landing page are good starting points.
-- **Design** — The brand lives in `media/`. Flyer templates, app store screenshots, and social posts all need work.
-- **Spread the word** — The whole point is that we do this together. Tell people about June 20.
-
-If you want to contribute, open an issue or submit a PR.
+- **Code** — The Android app and landing page are the biggest open items.
+- **Design** — App store screenshots, social posts, and flyer templates in `media/`.
+- **Spread the word** — The whole point is that we do this together. Tell people about June 21.
 
 ## License
 
