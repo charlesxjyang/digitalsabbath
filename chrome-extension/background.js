@@ -3,7 +3,7 @@
 
 // Sabbath dates — add new dates here as "YYYY-MM-DD"
 const SABBATH_DATES = [
-  "2026-06-20", // Summer solstice 2026
+  "2026-06-21", // Summer solstice 2026
 ];
 
 const RULESET_ID = "sabbath_rules";
