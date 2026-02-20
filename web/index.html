@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Sabbath — June 21, 2026</title>
+    <meta name="description" content="On the summer solstice, we all put down our phones together. One day. No doomscrolling. Just the real world.">
+    <meta property="og:title" content="Digital Sabbath">
+    <meta property="og:description" content="On June 21, 2026, we all put down our phones together. Join the Digital Sabbath.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://digitalsabbath.app">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Digital Sabbath">
+    <meta name="twitter:description" content="On June 21, 2026, we all put down our phones together.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9788;</text></svg>">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --cream: #f5f0e8;
+            --black: #1a1a1a;
+            --muted: rgba(26, 26, 26, 0.5);
+            --light: rgba(26, 26, 26, 0.35);
+            --accent: #c4a44a;
+        }
+
+        body {
+            font-family: 'Playfair Display', Georgia, serif;
+            background: var(--cream);
+            color: var(--black);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 24px;
+            position: relative;
+        }
+
+        .hero-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 28px;
+            margin-bottom: 48px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 8vw, 64px);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(17px, 3vw, 22px);
+            font-weight: 400;
+            color: var(--muted);
+            max-width: 500px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .hero .tagline {
+            font-size: clamp(14px, 2.5vw, 17px);
+            font-weight: 400;
+            color: var(--light);
+            max-width: 400px;
+            line-height: 1.8;
+            margin-bottom: 48px;
+        }
+
+        /* Countdown */
+        .countdown {
+            font-family: 'Inter', -apple-system, sans-serif;
+            font-size: clamp(32px, 6vw, 56px);
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            margin-bottom: 12px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .countdown-label {
+            font-size: 15px;
+            color: var(--light);
+            margin-bottom: 8px;
+        }
+
+        .countdown-date {
+            font-size: 14px;
+            color: var(--light);
+            font-weight: 300;
+            margin-bottom: 48px;
+        }
+
+        /* Counter */
+        .counter {
+            font-size: 15px;
+            color: var(--muted);
+            margin-bottom: 32px;
+        }
+
+        .counter strong {
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--black);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #333;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: rgba(26, 26, 26, 0.08);
+            color: var(--black);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(26, 26, 26, 0.14);
+            transform: translateY(-1px);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 32px;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            color: var(--light);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(6px); }
+        }
+
+        /* Sections */
+        section {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+
+        section h2 {
+            font-size: clamp(28px, 5vw, 40px);
+            font-weight: 300;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        section p {
+            font-size: 17px;
+            line-height: 1.8;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+
+        /* What's blocked */
+        .blocked-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .blocked-category {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .blocked-category h3 {
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--light);
+            margin-bottom: 12px;
+        }
+
+        .blocked-category ul {
+            list-style: none;
+            font-size: 16px;
+            line-height: 2;
+            color: var(--black);
+        }
+
+        /* How it works */
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .how-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+        }
+
+        .how-card h3 {
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 12px;
+        }
+
+        .how-card p {
+            font-size: 15px;
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        /* Privacy */
+        .privacy-section {
+            text-align: center;
+            padding: 60px 24px;
+            border-top: 1px solid rgba(26,26,26,0.08);
+        }
+
+        .privacy-section h2 {
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 16px;
+        }
+
+        .privacy-section p {
+            font-size: 16px;
+            color: var(--muted);
+            max-width: 500px;
+            margin: 0 auto 24px;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: var(--light);
+        }
+
+        footer a {
+            color: var(--muted);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--black);
+        }
+
+        /* Sabbath active state */
+        .sabbath-active .hero h1 {
+            font-size: clamp(32px, 7vw, 48px);
+        }
+
+        .sabbath-active .hero .subtitle {
+            font-size: 20px;
+        }
+
+        .sabbath-remaining {
+            font-family: 'Inter', -apple-system, sans-serif;
+            font-size: clamp(36px, 6vw, 52px);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .sabbath-remaining-label {
+            font-size: 16px;
+            color: var(--light);
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 480px) {
+            .buttons { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 280px; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero" id="hero">
+        <img src="icon.jpg" alt="Digital Sabbath" class="hero-icon" id="heroIcon">
+
+        <h1 id="heroTitle">Digital Sabbath</h1>
+
+        <p class="subtitle" id="heroSubtitle">On June 21, 2026, we all put down our phones together.</p>
+
+        <p class="tagline" id="heroTagline">No doomscrolling. One day of collective rest.</p>
+
+        <div id="countdownSection">
+            <div class="countdown" id="countdown"></div>
+            <div class="countdown-label">Digital Sabbath</div>
+            <div class="countdown-date">June 21, 2026 &mdash; Summer Solstice</div>
+        </div>
+
+        <div id="sabbathSection" style="display:none;">
+            <div class="sabbath-remaining" id="sabbathRemaining"></div>
+            <div class="sabbath-remaining-label">remaining</div>
+        </div>
+
+        <p class="counter" id="counter"></p>
+
+        <div class="buttons" id="buttons">
+            <a href="#" class="btn btn-primary" id="iosBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                Download for iOS
+            </a>
+            <a href="#" class="btn btn-secondary" id="chromeBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3a7 7 0 0 1 6.33 4H12a3 3 0 0 0-2.83 2.03L6.6 6.6A7 7 0 0 1 12 5zm-7 7a7 7 0 0 1 .67-3l3.47 6A3 3 0 0 0 12 17a3 3 0 0 0 .83-.12l-2.56 4.43A7 7 0 0 1 5 12zm7 7a7 7 0 0 1-1.44-.15L13.1 14A3 3 0 0 0 15 12a3 3 0 0 0-.06-.6h5.73A7 7 0 0 1 12 19z"/></svg>
+                Chrome Extension
+            </a>
+        </div>
+
+        <div class="scroll-hint" id="scrollHint">&darr; Learn more</div>
+    </div>
+
+    <section>
+        <h2>What happens on June 21?</h2>
+        <p>At midnight on the summer solstice, Digital Sabbath activates. For the next 24 hours, social media feeds won't load. Gambling sites won't respond. AI chatbots go quiet. Everything else works normally &mdash; calls, texts, maps, music, banking.</p>
+        <p>You can still open the apps. But their feeds return nothing. A quiet reminder to look up.</p>
+    </section>
+
+    <section>
+        <h2>What's blocked</h2>
+        <div class="blocked-grid">
+            <div class="blocked-category">
+                <h3>Social Media</h3>
+                <ul>
+                    <li>Instagram</li>
+                    <li>TikTok</li>
+                    <li>Twitter / X</li>
+                    <li>Facebook</li>
+                    <li>Reddit</li>
+                    <li>Snapchat</li>
+                    <li>Threads</li>
+                    <li>Bluesky</li>
+                </ul>
+            </div>
+            <div class="blocked-category">
+                <h3>Gambling</h3>
+                <ul>
+                    <li>Kalshi</li>
+                    <li>Polymarket</li>
+                </ul>
+            </div>
+            <div class="blocked-category">
+                <h3>AI</h3>
+                <ul>
+                    <li>ChatGPT</li>
+                    <li>Gemini</li>
+                    <li>Claude</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>How it works</h2>
+        <div class="how-grid">
+            <div class="how-card">
+                <h3>iOS</h3>
+                <p>A lightweight VPN runs entirely on your device. It intercepts DNS requests and returns empty responses for blocked domains. No data leaves your phone.</p>
+            </div>
+            <div class="how-card">
+                <h3>Chrome</h3>
+                <p>A Manifest V3 extension uses declarative rules to block the same domains in your browser. No background scripts, no data collection.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="privacy-section">
+        <h2>Your data stays yours</h2>
+        <p>Digital Sabbath processes everything locally on your device. We never see your browsing data. We never see which apps you use. The only thing our server knows is that you joined &mdash; a single counter, nothing more.</p>
+        <a href="https://github.com/charlesxjyang/digitalsabbath" class="btn btn-secondary" style="margin-top: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            View source on GitHub
+        </a>
+    </div>
+
+    <footer>
+        <p>Digital Sabbath is open source. &nbsp;|&nbsp; <a href="https://github.com/charlesxjyang/digitalsabbath">GitHub</a> &nbsp;|&nbsp; <a href="https://discord.gg/YOUR_INVITE_CODE">Discord</a></p>
+    </footer>
+
+    <script>
+        const SABBATH_DATE = '2026-06-21';
+        const API_BASE = 'https://digital-sabbath-api.charlesxjyang.workers.dev';
+
+        function isSabbathDay() {
+            const now = new Date();
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}` === SABBATH_DATE;
+        }
+
+        function getSabbathTarget() {
+            const parts = SABBATH_DATE.split('-');
+            return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+        }
+
+        function getEndOfDay() {
+            const now = new Date();
+            const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+            return tomorrow;
+        }
+
+        function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
+
+        function updateCountdown() {
+            if (isSabbathDay()) {
+                document.getElementById('countdownSection').style.display = 'none';
+                document.getElementById('sabbathSection').style.display = 'block';
+                document.getElementById('heroTitle').textContent = 'Sabbath is active.';
+                document.getElementById('heroSubtitle').textContent = 'Today we rest together.';
+                document.getElementById('heroTagline').textContent = 'Be present.';
+                document.getElementById('scrollHint').style.display = 'none';
+                document.body.classList.add('sabbath-active');
+
+                const end = getEndOfDay();
+                const diff = end - new Date();
+                const h = Math.floor(diff / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                document.getElementById('sabbathRemaining').textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+            } else {
+                const target = getSabbathTarget();
+                const diff = target - new Date();
+
+                if (diff <= 0) {
+                    document.getElementById('countdown').textContent = '00d 00h 00m 00s';
+                    return;
+                }
+
+                const days = Math.floor(diff / 86400000);
+                const hours = Math.floor((diff % 86400000) / 3600000);
+                const mins = Math.floor((diff % 3600000) / 60000);
+                const secs = Math.floor((diff % 60000) / 1000);
+
+                document.getElementById('countdown').textContent =
+                    `${days}d ${pad(hours)}h ${pad(mins)}m ${pad(secs)}s`;
+            }
+        }
+
+        async function fetchCount() {
+            try {
+                const res = await fetch(`${API_BASE}/count`);
+                const data = await res.json();
+                const count = Math.max(1, data.count || 1);
+                document.getElementById('counter').innerHTML =
+                    `<strong>${count.toLocaleString()}</strong> ${count === 1 ? 'person has' : 'people have'} joined`;
+            } catch {
+                document.getElementById('counter').innerHTML = '';
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        fetchCount();
+    </script>
+</body>
+</html>
