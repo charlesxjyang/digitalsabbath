@@ -18,6 +18,13 @@ struct BlockedDomains {
         "bsky.social",
         // "youtube.com", // Toggle: uncomment to block YouTube
 
+        // Dating
+        "hinge.co",
+        "hingecdn.com",
+        "tinder.com",
+        "gotinder.com",
+        "bumble.com",
+
         // Gambling
         "kalshi.com",
         "polymarket.com",

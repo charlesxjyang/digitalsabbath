@@ -16,6 +16,11 @@ struct BlockedAppsSheet: View {
                     blockedAppRow("Threads", domain: "threads.net")
                     blockedAppRow("Bluesky", domain: "bsky.app")
                 }
+                Section(header: Text("Dating")) {
+                    blockedAppRow("Hinge", domain: "hinge.co")
+                    blockedAppRow("Tinder", domain: "tinder.com")
+                    blockedAppRow("Bumble", domain: "bumble.com")
+                }
                 Section(header: Text("Gambling")) {
                     blockedAppRow("Kalshi", domain: "kalshi.com")
                     blockedAppRow("Polymarket", domain: "polymarket.com")

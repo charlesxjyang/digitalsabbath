@@ -10,7 +10,8 @@ struct ContentView: View {
 
     private static let apiBase = "https://digital-sabbath-api.charlesxjyang.workers.dev"
 
-    private let discordURL = URL(string: "https://discord.gg/YOUR_INVITE_CODE")!
+    @State private var discordURL: String = ""
+    @State private var shareURL: String = "https://digitalsabbath.live"
 
     var body: some View {
         ZStack {
@@ -31,6 +32,7 @@ struct ContentView: View {
         }
         .task {
             await fetchCount()
+            await fetchConfig()
         }
     }
 
@@ -42,6 +44,17 @@ struct ContentView: View {
                let count = json["count"] {
                 joinedCount = max(1, count)
                 UserDefaults.standard.set(count, forKey: "joinedCount")
+            }
+        } catch {}
+    }
+
+    private func fetchConfig() async {
+        guard let url = URL(string: "\(Self.apiBase)/config") else { return }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            if let json = try? JSONDecoder().decode([String: String].self, from: data) {
+                if let discord = json["discord_url"], !discord.isEmpty { discordURL = discord }
+                if let share = json["share_url"], !share.isEmpty { shareURL = share }
             }
         } catch {}
     }
@@ -153,20 +166,38 @@ struct ContentView: View {
                 .padding(.horizontal, 40)
                 .padding(.bottom, 16)
 
-            Button(action: {
-                UIApplication.shared.open(discordURL)
-            }) {
-                HStack(spacing: 6) {
-                    Image(systemName: "bubble.left.fill")
-                        .font(.system(size: 12))
-                    Text("Join our Discord")
-                        .font(.system(size: 13, weight: .medium))
+            HStack(spacing: 12) {
+                ShareLink(item: "On June 21, 2026, we're all putting down our phones together. Join the Digital Sabbath. \(shareURL)") {
+                    HStack(spacing: 6) {
+                        Image(systemName: "square.and.arrow.up")
+                            .font(.system(size: 12))
+                        Text("Share")
+                            .font(.system(size: 13, weight: .medium))
+                    }
+                    .foregroundColor(.black.opacity(0.6))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Color.black.opacity(0.08))
+                    .cornerRadius(16)
                 }
-                .foregroundColor(Color(red: 0.34, green: 0.40, blue: 0.95))
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-                .background(Color(red: 0.34, green: 0.40, blue: 0.95).opacity(0.12))
-                .cornerRadius(16)
+
+                if !discordURL.isEmpty, let url = URL(string: discordURL) {
+                    Button(action: {
+                        UIApplication.shared.open(url)
+                    }) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "bubble.left.fill")
+                                .font(.system(size: 12))
+                            Text("Discord")
+                                .font(.system(size: 13, weight: .medium))
+                        }
+                        .foregroundColor(Color(red: 0.34, green: 0.40, blue: 0.95))
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Color(red: 0.34, green: 0.40, blue: 0.95).opacity(0.12))
+                        .cornerRadius(16)
+                    }
+                }
             }
             .padding(.bottom, 60)
         }

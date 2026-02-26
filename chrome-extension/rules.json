@@ -121,7 +121,7 @@
       }
     },
     "condition": {
-      "urlFilter": "||kalshi.com",
+      "urlFilter": "||hinge.co",
       "resourceTypes": ["main_frame"]
     }
   },
@@ -135,12 +135,54 @@
       }
     },
     "condition": {
-      "urlFilter": "||polymarket.com",
+      "urlFilter": "||tinder.com",
       "resourceTypes": ["main_frame"]
     }
   },
   {
     "id": 11,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "extensionPath": "/blocked.html"
+      }
+    },
+    "condition": {
+      "urlFilter": "||bumble.com",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 12,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "extensionPath": "/blocked.html"
+      }
+    },
+    "condition": {
+      "urlFilter": "||kalshi.com",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 13,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "extensionPath": "/blocked.html"
+      }
+    },
+    "condition": {
+      "urlFilter": "||polymarket.com",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 14,
     "priority": 1,
     "action": {
       "type": "redirect",
