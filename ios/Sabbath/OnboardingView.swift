@@ -1,4 +1,5 @@
 import SwiftUI
+import os.log
 
 struct OnboardingView: View {
     @ObservedObject var vpnManager: VPNManager
@@ -153,6 +154,14 @@ struct OnboardingView: View {
         guard let url = URL(string: "https://digital-sabbath-api.charlesxjyang.workers.dev/join") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        _ = try? await URLSession.shared.data(for: request)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let deviceId = DeviceID.getOrCreate()
+        let body = ["device_id": deviceId]
+        request.httpBody = try? JSONEncoder().encode(body)
+        do {
+            _ = try await URLSession.shared.data(for: request)
+        } catch {
+            os_log("Failed to register join: %{public}@", type: .error, error.localizedDescription)
+        }
     }
 }

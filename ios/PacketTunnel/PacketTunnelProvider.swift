@@ -8,6 +8,15 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     private let tunnelAddress = "198.18.0.2"
     private let upstreamDNS = "1.1.1.1"
 
+    private static let sabbathFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd"
+        f.timeZone = .current
+        return f
+    }()
+    private var cachedSabbathDate: String = ""
+    private var cachedIsSabbath: Bool = false
+
     override func startTunnel(options: [String: NSObject]?, completionHandler: @escaping (Error?) -> Void) {
         os_log("Starting Sabbath tunnel", log: log, type: .info)
 
@@ -74,15 +83,25 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
         let endpoint = NWHostEndpoint(hostname: upstreamDNS, port: "53")
         let session = createUDPSession(to: endpoint, from: nil)
 
+        // Timeout: cancel session if no response within 5 seconds
+        let timeoutWork = DispatchWorkItem { [weak self] in
+            os_log("DNS forward timed out", log: self?.log ?? .default, type: .error)
+            session.cancel()
+        }
+        DispatchQueue.global().asyncAfter(deadline: .now() + 5, execute: timeoutWork)
+
         session.setReadHandler({ [weak self] datagrams, error in
+            timeoutWork.cancel()
             if let response = datagrams?.first {
                 self?.sendDNSResponse(response, originalPacket: originalPacket, ihl: ihl, protocolNumber: protocolNumber)
             }
             session.cancel()
         }, maxDatagrams: 1)
 
-        session.writeDatagram(query) { error in
-            if error != nil {
+        session.writeDatagram(query) { [weak self] error in
+            if let error = error {
+                os_log("DNS forward write failed: %{public}@", log: self?.log ?? .default, type: .error, error.localizedDescription)
+                timeoutWork.cancel()
                 session.cancel()
             }
         }
@@ -148,9 +167,11 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     }
 
     private func checkIsSabbath() -> Bool {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        f.timeZone = .current
-        return ["2026-02-16", "2026-06-21"].contains(f.string(from: Date()))
+        let today = Self.sabbathFormatter.string(from: Date())
+        if today != cachedSabbathDate {
+            cachedSabbathDate = today
+            cachedIsSabbath = ["2026-06-21"].contains(today)
+        }
+        return cachedIsSabbath
     }
 }

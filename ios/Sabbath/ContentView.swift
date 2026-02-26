@@ -1,4 +1,5 @@
 import SwiftUI
+import os.log
 
 struct ContentView: View {
     @ObservedObject var vpnManager: VPNManager
@@ -45,7 +46,9 @@ struct ContentView: View {
                 joinedCount = max(1, count)
                 UserDefaults.standard.set(count, forKey: "joinedCount")
             }
-        } catch {}
+        } catch {
+            os_log("Failed to fetch count: %{public}@", type: .error, error.localizedDescription)
+        }
     }
 
     private func fetchConfig() async {
@@ -56,7 +59,9 @@ struct ContentView: View {
                 if let discord = json["discord_url"], !discord.isEmpty { discordURL = discord }
                 if let share = json["share_url"], !share.isEmpty { shareURL = share }
             }
-        } catch {}
+        } catch {
+            os_log("Failed to fetch config: %{public}@", type: .error, error.localizedDescription)
+        }
     }
 
     private var sabbathEndOfDay: Date {

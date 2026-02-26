@@ -82,7 +82,7 @@ class VPNManager: ObservableObject {
                     self?.isConnected = true
                 }
             } catch {
-                os_log("Failed to start tunnel: %{public}@", type: .error, error.localizedDescription)
+                os_log("Failed to start tunnel: %{public}@", log: self?.log ?? .default, type: .error, error.localizedDescription)
             }
         }
     }
