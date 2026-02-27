@@ -10,5 +10,7 @@
 	<array>
 		<string>group.com.digitalsabbath.app</string>
 	</array>
+	<key>aps-environment</key>
+	<string>production</string>
 </dict>
 </plist>
