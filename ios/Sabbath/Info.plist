@@ -5,7 +5,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Sabbath</string>
+	<string>Digital Sabbath</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleVersion</key>
@@ -26,10 +26,10 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>network-authentication</string>
-	</array>
+	<key>NSContactsUsageDescription</key>
+	<string>Digital Sabbath checks which of your contacts have joined so you can see your friends and invite others. Phone numbers are hashed on your device — we never see your contacts.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

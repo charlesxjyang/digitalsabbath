@@ -8,10 +8,12 @@ struct OnboardingView: View {
     @State private var step: OnboardingStep = .mission
     @State private var isLoading = false
     @State private var showBlockedApps = false
+    @State private var showFriendsView = false
 
     enum OnboardingStep {
         case mission
         case permission
+        case findFriends
     }
 
     var body: some View {
@@ -24,6 +26,9 @@ struct OnboardingView: View {
                     .transition(.opacity)
             case .permission:
                 permissionView
+                    .transition(.opacity)
+            case .findFriends:
+                findFriendsPromptView
                     .transition(.opacity)
             }
         }
@@ -126,7 +131,7 @@ struct OnboardingView: View {
                     isLoading = false
                     if success {
                         Task { await Self.registerJoin() }
-                        hasOnboarded = true
+                        step = .findFriends
                     }
                 }
             }) {
@@ -147,6 +152,70 @@ struct OnboardingView: View {
             }
             .padding(.horizontal, 40)
             .padding(.bottom, 60)
+        }
+    }
+
+    // MARK: - Step 3: Find Friends
+
+    private var findFriendsPromptView: some View {
+        VStack(spacing: 0) {
+            infoButton
+
+            Spacer()
+
+            Image(systemName: "person.2.fill")
+                .font(.system(size: 48))
+                .foregroundColor(.black.opacity(0.3))
+                .padding(.bottom, 24)
+
+            Text("Find your friends")
+                .font(.system(size: 36, weight: .thin, design: .serif))
+                .foregroundColor(.black)
+                .padding(.bottom, 32)
+
+            Text("See which of your contacts have joined Digital Sabbath and invite the rest.")
+                .font(.system(size: 17, weight: .regular, design: .serif))
+                .foregroundColor(.black.opacity(0.65))
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 40)
+                .padding(.bottom, 16)
+
+            Text("Phone numbers are hashed on your device — we never see your contacts.")
+                .font(.system(size: 15, weight: .regular, design: .serif))
+                .foregroundColor(.black.opacity(0.4))
+                .multilineTextAlignment(.center)
+                .lineSpacing(4)
+                .padding(.horizontal, 40)
+
+            Spacer()
+
+            Button(action: {
+                showFriendsView = true
+            }) {
+                Text("Find Friends")
+                    .font(.system(size: 18, weight: .medium, design: .serif))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
+                    .background(Color.black)
+                    .cornerRadius(28)
+            }
+            .padding(.horizontal, 40)
+            .padding(.bottom, 12)
+
+            Button(action: {
+                hasOnboarded = true
+            }) {
+                Text("Maybe later")
+                    .font(.system(size: 16, weight: .regular, design: .serif))
+                    .foregroundColor(.black.opacity(0.4))
+            }
+            .padding(.bottom, 60)
+        }
+        .sheet(isPresented: $showFriendsView, onDismiss: {
+            hasOnboarded = true
+        }) {
+            FriendsView()
         }
     }
 
