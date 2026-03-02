@@ -282,7 +282,7 @@ struct FriendsView: View {
 struct MessageComposerView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> MFMessageComposeViewController {
         let vc = MFMessageComposeViewController()
-        vc.body = "On June 21, 2026, we're all putting down our phones together. Join the Digital Sabbath. https://digitalsabbath.live"
+        vc.body = "I'm committing to a day of digital sabbath on June 21, 2026. You can join me by downloading Digital Sabbath: https://digitalsabbath.live"
         vc.messageComposeDelegate = context.coordinator
         return vc
     }

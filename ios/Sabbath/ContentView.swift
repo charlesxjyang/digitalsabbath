@@ -14,7 +14,6 @@ struct ContentView: View {
     @State private var discordURL: String = ""
     @State private var shareURL: String = "https://digitalsabbath.live"
     @State private var showFriendsView = false
-    @State private var friendMatchCount: Int = UserDefaults.standard.integer(forKey: "friendMatchCount")
 
     var body: some View {
         ZStack {
@@ -35,9 +34,6 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showFriendsView) {
             FriendsView()
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)) { _ in
-            friendMatchCount = UserDefaults.standard.integer(forKey: "friendMatchCount")
         }
         .task {
             await fetchCount()
@@ -154,6 +150,8 @@ struct ContentView: View {
                 Text(countdownString(from: components))
                     .font(.system(size: 48, weight: .bold, design: .monospaced))
                     .foregroundColor(.black)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
                     .padding(.bottom, 8)
 
                 Text("Digital Sabbath")
@@ -185,20 +183,6 @@ struct ContentView: View {
                         Image(systemName: "square.and.arrow.up")
                             .font(.system(size: 12))
                         Text("Share")
-                            .font(.system(size: 13, weight: .medium))
-                    }
-                    .foregroundColor(.black.opacity(0.6))
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(Color.black.opacity(0.08))
-                    .cornerRadius(16)
-                }
-
-                Button(action: { showFriendsView = true }) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "person.2.fill")
-                            .font(.system(size: 12))
-                        Text(friendMatchCount > 0 ? "\(friendMatchCount) Friend\(friendMatchCount == 1 ? "" : "s")" : "Friends")
                             .font(.system(size: 13, weight: .medium))
                     }
                     .foregroundColor(.black.opacity(0.6))
