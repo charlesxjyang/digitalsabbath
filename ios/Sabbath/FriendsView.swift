@@ -6,11 +6,9 @@ struct FriendsView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var phoneNumber: String = UserDefaults.standard.string(forKey: "userPhoneNumber") ?? ""
     @State private var matchedFriends: [ContactMatch] = []
-    @State private var unmatchedContacts: [ContactMatch] = []
     @State private var isLoading = false
     @State private var hasSearched = UserDefaults.standard.bool(forKey: "hasSearchedFriends")
     @State private var showMessageComposer = false
-    @State private var messageRecipients: [String] = []
     @State private var errorMessage: String?
 
     private static let apiBase = "https://digital-sabbath-api.charlesxjyang.workers.dev"
@@ -47,7 +45,7 @@ struct FriendsView: View {
         }
         .onAppear { loadCachedResults() }
         .sheet(isPresented: $showMessageComposer) {
-            MessageComposerView(recipients: messageRecipients)
+            MessageComposerView()
         }
     }
 
@@ -144,20 +142,18 @@ struct FriendsView: View {
                 .padding(.top, 20)
             }
 
-            if !unmatchedContacts.isEmpty {
-                Button(action: { inviteContacts() }) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "paperplane.fill")
-                            .font(.system(size: 14))
-                        Text("Invite Friends")
-                            .font(.system(size: 16, weight: .medium, design: .serif))
-                    }
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 48)
-                    .background(Color.black)
-                    .cornerRadius(24)
+            Button(action: { inviteContacts() }) {
+                HStack(spacing: 8) {
+                    Image(systemName: "paperplane.fill")
+                        .font(.system(size: 14))
+                    Text("Invite Friends")
+                        .font(.system(size: 16, weight: .medium, design: .serif))
                 }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 48)
+                .background(Color.black)
+                .cornerRadius(24)
             }
 
             Button(action: { resetAndResearch() }) {
@@ -210,7 +206,6 @@ struct FriendsView: View {
         let matchedSet = Set(matchedHashes)
 
         matchedFriends = contacts.filter { matchedSet.contains($0.hash) }
-        unmatchedContacts = contacts.filter { !matchedSet.contains($0.hash) }
 
         // Cache results
         cacheResults()
@@ -270,20 +265,12 @@ struct FriendsView: View {
 
     private func inviteContacts() {
         guard MFMessageComposeViewController.canSendText() else { return }
-        // Pick up to 10 unmatched contacts for the invite
-        let recipients = Array(unmatchedContacts.prefix(10)).compactMap { contact -> String? in
-            // We have the hash but not the raw number — re-fetch is needed
-            // For simplicity, open composer without pre-filled recipients
-            nil
-        }
-        messageRecipients = recipients
         showMessageComposer = true
     }
 
     private func resetAndResearch() {
         hasSearched = false
         matchedFriends = []
-        unmatchedContacts = []
         UserDefaults.standard.set(false, forKey: "hasSearchedFriends")
         UserDefaults.standard.removeObject(forKey: "cachedMatchedFriends")
         UserDefaults.standard.set(0, forKey: "friendMatchCount")
@@ -293,11 +280,8 @@ struct FriendsView: View {
 // MARK: - Message Composer
 
 struct MessageComposerView: UIViewControllerRepresentable {
-    let recipients: [String]
-
     func makeUIViewController(context: Context) -> MFMessageComposeViewController {
         let vc = MFMessageComposeViewController()
-        vc.recipients = recipients.isEmpty ? nil : recipients
         vc.body = "On June 21, 2026, we're all putting down our phones together. Join the Digital Sabbath. https://digitalsabbath.live"
         vc.messageComposeDelegate = context.coordinator
         return vc
