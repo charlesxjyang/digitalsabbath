@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — Digital Sabbath</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9788;</text></svg>">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --cream: #f5f0e8;
+            --black: #1a1a1a;
+            --muted: rgba(26, 26, 26, 0.5);
+            --light: rgba(26, 26, 26, 0.35);
+        }
+
+        body {
+            font-family: 'Playfair Display', Georgia, serif;
+            background: var(--cream);
+            color: var(--black);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 300;
+            margin-bottom: 8px;
+        }
+
+        .updated {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: var(--light);
+            margin-bottom: 48px;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 400;
+            margin-top: 40px;
+            margin-bottom: 16px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        ul {
+            margin: 0 0 16px 24px;
+            font-size: 16px;
+            line-height: 2;
+            color: var(--muted);
+        }
+
+        a {
+            color: var(--black);
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 40px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: var(--light);
+            text-decoration: none;
+        }
+
+        .back:hover {
+            color: var(--black);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: var(--light);
+        }
+
+        footer a {
+            color: var(--muted);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--black);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back">&larr; Back to Digital Sabbath</a>
+
+        <h1>Privacy Policy</h1>
+        <p class="updated">Last updated: March 2, 2026</p>
+
+        <p>Digital Sabbath is built on a simple principle: your data is yours. We collect the absolute minimum needed to make the app work, and nothing more.</p>
+
+        <h2>What we collect</h2>
+
+        <p><strong>A random device identifier.</strong> When you join Digital Sabbath, the app generates a random UUID on your device and sends it to our server. This is not your Apple device ID or any hardware identifier. It exists solely to prevent the participant counter from counting you twice.</p>
+
+        <p><strong>A participant count.</strong> Our server maintains a single number: how many people have joined. That's it.</p>
+
+        <h2>What we don't collect</h2>
+
+        <ul>
+            <li>No names, email addresses, or phone numbers</li>
+            <li>No browsing data or app usage history</li>
+            <li>No location data</li>
+            <li>No device information beyond the random ID</li>
+            <li>No analytics or tracking of any kind</li>
+        </ul>
+
+        <h2>The VPN / content filter</h2>
+
+        <p>Digital Sabbath uses an on-device content filter (VPN configuration) to block distracting apps during the sabbath. This filter runs entirely on your device. It intercepts DNS requests locally and returns empty responses for blocked domains. No network traffic passes through our servers. We never see which apps you use, which websites you visit, or any of your internet activity.</p>
+
+        <h2>Data storage</h2>
+
+        <p>The random device IDs and participant count are stored on Cloudflare Workers KV, our hosting infrastructure. Cloudflare processes requests as our infrastructure provider but does not access or use stored data for their own purposes.</p>
+
+        <h2>Third parties</h2>
+
+        <p>We do not share any data with third parties. There are no ads, no analytics SDKs, no tracking pixels, and no third-party integrations that receive user data.</p>
+
+        <h2>Data retention</h2>
+
+        <p>The random device ID and participant count are retained indefinitely to keep the counter accurate. Since the device ID is a random UUID with no connection to your identity, this data cannot be used to identify you.</p>
+
+        <h2>Children's privacy</h2>
+
+        <p>Digital Sabbath does not knowingly collect data from children under 13. The app collects the same minimal data (a random ID) from all users regardless of age.</p>
+
+        <h2>Changes to this policy</h2>
+
+        <p>If we make changes to this policy, we will update it here with a new date. The app's core privacy principle will not change: your data stays on your device.</p>
+
+        <h2>Contact</h2>
+
+        <p>Questions about this policy? Reach us on <a href="https://github.com/charlesxjyang/digitalsabbath">GitHub</a>.</p>
+    </div>
+
+    <footer>
+        <p>Digital Sabbath is open source. &nbsp;|&nbsp; <a href="https://github.com/charlesxjyang/digitalsabbath">GitHub</a></p>
+    </footer>
+</body>
+</html>
