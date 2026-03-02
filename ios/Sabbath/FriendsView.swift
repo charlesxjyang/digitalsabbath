@@ -146,7 +146,7 @@ struct FriendsView: View {
                 HStack(spacing: 8) {
                     Image(systemName: "paperplane.fill")
                         .font(.system(size: 14))
-                    Text("Invite Friends")
+                    Text(matchedFriends.isEmpty ? "Invite Friends" : "Invite More Friends")
                         .font(.system(size: 16, weight: .medium, design: .serif))
                 }
                 .foregroundColor(.white)
