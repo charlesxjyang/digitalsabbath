@@ -140,7 +140,7 @@ struct OnboardingView: View {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
                     } else {
-                        Text("I'm in")
+                        Text("Unlock Digital Sabbath")
                             .font(.system(size: 18, weight: .medium, design: .serif))
                     }
                 }

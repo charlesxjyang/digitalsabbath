@@ -178,7 +178,7 @@ struct ContentView: View {
                 .padding(.bottom, 16)
 
             HStack(spacing: 12) {
-                ShareLink(item: "On June 21, 2026, we're all putting down our phones together. Join the Digital Sabbath. \(shareURL)") {
+                ShareLink(item: "I'm committing to a day of digital sabbath on June 21, 2026. You can join me by downloading Digital Sabbath: \(shareURL)") {
                     HStack(spacing: 6) {
                         Image(systemName: "square.and.arrow.up")
                             .font(.system(size: 12))
