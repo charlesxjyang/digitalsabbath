@@ -2,7 +2,6 @@ import Foundation
 
 struct SabbathSchedule {
     static let sabbathDates: [String] = [
-        "2026-02-16", // Testing
         "2026-06-21", // Summer solstice
     ]
 
@@ -31,5 +30,18 @@ struct SabbathSchedule {
             .filter { $0 >= startOfToday }
             .sorted()
             .first
+    }
+
+    static func isUpcoming() -> Bool {
+        let now = Date()
+        let calendar = Calendar.current
+        for date in parsedDates {
+            let sabbathStart = calendar.startOfDay(for: date)
+            guard let cutoff = calendar.date(byAdding: .day, value: -60, to: sabbathStart) else { continue }
+            if now >= cutoff && now < sabbathStart {
+                return true
+            }
+        }
+        return false
     }
 }

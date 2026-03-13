@@ -21,21 +21,19 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct SabbathApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @StateObject private var vpnManager = VPNManager()
+    @StateObject private var screenTimeManager = ScreenTimeManager()
     @AppStorage("hasOnboarded") private var hasOnboarded = false
 
     var body: some Scene {
         WindowGroup {
             if hasOnboarded {
-                ContentView(vpnManager: vpnManager)
+                ContentView(screenTimeManager: screenTimeManager)
                     .onAppear {
-                        if SabbathSchedule.isSabbathActive() && !vpnManager.isConnected {
-                            vpnManager.startTunnel()
-                        }
                         scheduleSabbathNotifications()
+                        screenTimeManager.scheduleSabbathBlocking()
                     }
             } else {
-                OnboardingView(vpnManager: vpnManager, hasOnboarded: $hasOnboarded)
+                OnboardingView(hasOnboarded: $hasOnboarded, screenTimeManager: screenTimeManager)
             }
         }
     }

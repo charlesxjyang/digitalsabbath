@@ -2,17 +2,17 @@ import SwiftUI
 import os.log
 
 struct OnboardingView: View {
-    @ObservedObject var vpnManager: VPNManager
     @Binding var hasOnboarded: Bool
+    @ObservedObject var screenTimeManager: ScreenTimeManager
 
     @State private var step: OnboardingStep = .mission
-    @State private var isLoading = false
-    @State private var showBlockedApps = false
+    @State private var showAbout = false
     @State private var showFriendsView = false
+    @State private var showAppPicker = false
 
     enum OnboardingStep {
         case mission
-        case permission
+        case selectApps
         case findFriends
     }
 
@@ -24,8 +24,8 @@ struct OnboardingView: View {
             case .mission:
                 missionView
                     .transition(.opacity)
-            case .permission:
-                permissionView
+            case .selectApps:
+                selectAppsView
                     .transition(.opacity)
             case .findFriends:
                 findFriendsPromptView
@@ -33,15 +33,24 @@ struct OnboardingView: View {
             }
         }
         .animation(.easeInOut(duration: 0.4), value: step)
-        .sheet(isPresented: $showBlockedApps) {
-            BlockedAppsSheet()
+        .sheet(isPresented: $showAbout) {
+            AboutSheet()
         }
     }
 
-    private var infoButton: some View {
+    private func navBar(showBack: Bool = false, backAction: (() -> Void)? = nil) -> some View {
         HStack {
+            if showBack, let backAction = backAction {
+                Button(action: backAction) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 17, weight: .medium))
+                        .foregroundColor(.black.opacity(0.4))
+                }
+                .padding(.leading, 24)
+                .padding(.top, 16)
+            }
             Spacer()
-            Button(action: { showBlockedApps = true }) {
+            Button(action: { showAbout = true }) {
                 Image(systemName: "info.circle")
                     .font(.system(size: 22))
                     .foregroundColor(.black.opacity(0.4))
@@ -55,7 +64,7 @@ struct OnboardingView: View {
 
     private var missionView: some View {
         VStack(spacing: 0) {
-            infoButton
+            navBar()
 
             Spacer()
 
@@ -81,7 +90,11 @@ struct OnboardingView: View {
             Spacer()
 
             Button(action: {
-                step = .permission
+                Task {
+                    await Self.registerJoin()
+                    await screenTimeManager.requestAuthorization()
+                }
+                step = .selectApps
             }) {
                 Text("I'm in")
                     .font(.system(size: 18, weight: .medium, design: .serif))
@@ -96,62 +109,50 @@ struct OnboardingView: View {
         }
     }
 
-    // MARK: - Step 2: Permission
+    // MARK: - Step 2: Select Apps
 
-    private var permissionView: some View {
+    private var selectAppsView: some View {
         VStack(spacing: 0) {
-            infoButton
+            navBar(showBack: true) { step = .mission }
 
             Spacer()
 
-            Text("One small step")
+            Image(systemName: "shield.checkered")
+                .font(.system(size: 48))
+                .foregroundColor(.black.opacity(0.3))
+                .padding(.bottom, 24)
+
+            Text("Choose apps to block")
                 .font(.system(size: 36, weight: .thin, design: .serif))
                 .foregroundColor(.black)
                 .padding(.bottom, 32)
 
-            Text("On the day of Digital Sabbath, the app will block scrolling apps by filtering their network requests on your device.")
+            Text("Select the apps you want blocked during Digital Sabbath on June 21, 2026.")
                 .font(.system(size: 17, weight: .regular, design: .serif))
                 .foregroundColor(.black.opacity(0.65))
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 40)
-                .padding(.bottom, 16)
-
-            Text("Your data never leaves your device.")
-                .font(.system(size: 15, weight: .regular, design: .serif))
-                .foregroundColor(.black.opacity(0.4))
-                .multilineTextAlignment(.center)
-                .lineSpacing(4)
                 .padding(.horizontal, 40)
 
             Spacer()
 
             Button(action: {
-                isLoading = true
-                vpnManager.installAndEnable { success in
-                    isLoading = false
-                    if success {
-                        Task { await Self.registerJoin() }
-                        step = .findFriends
-                    }
-                }
+                showAppPicker = true
             }) {
-                Group {
-                    if isLoading {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                    } else {
-                        Text("Unlock Digital Sabbath")
-                            .font(.system(size: 18, weight: .medium, design: .serif))
-                    }
-                }
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: 56)
-                .background(Color.black)
-                .cornerRadius(28)
+                Text("Select Apps")
+                    .font(.system(size: 18, weight: .medium, design: .serif))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 56)
+                    .background(Color.black)
+                    .cornerRadius(28)
             }
             .padding(.horizontal, 40)
             .padding(.bottom, 60)
+        }
+        .sheet(isPresented: $showAppPicker) {
+            AppSelectionView(screenTimeManager: screenTimeManager) {
+                step = .findFriends
+            }
         }
     }
 
@@ -159,7 +160,7 @@ struct OnboardingView: View {
 
     private var findFriendsPromptView: some View {
         VStack(spacing: 0) {
-            infoButton
+            navBar(showBack: true) { step = .selectApps }
 
             Spacer()
 
@@ -180,11 +181,10 @@ struct OnboardingView: View {
                 .padding(.horizontal, 40)
                 .padding(.bottom, 16)
 
-            Text("Phone numbers are hashed on your device — we never see your contacts.")
+            Text("We will never text you.")
                 .font(.system(size: 15, weight: .regular, design: .serif))
                 .foregroundColor(.black.opacity(0.4))
                 .multilineTextAlignment(.center)
-                .lineSpacing(4)
                 .padding(.horizontal, 40)
 
             Spacer()

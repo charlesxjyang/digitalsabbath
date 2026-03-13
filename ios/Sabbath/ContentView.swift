@@ -2,7 +2,7 @@ import SwiftUI
 import os.log
 
 struct ContentView: View {
-    @ObservedObject var vpnManager: VPNManager
+    @ObservedObject var screenTimeManager: ScreenTimeManager
     @State private var now = Date()
     @State private var showBlockedApps = false
     @State private var joinedCount: Int = max(1, UserDefaults.standard.integer(forKey: "joinedCount"))
@@ -14,6 +14,14 @@ struct ContentView: View {
     @State private var discordURL: String = ""
     @State private var shareURL: String = "https://digitalsabbath.live"
     @State private var showFriendsView = false
+    @State private var showAppPicker = false
+    @State private var showPreviewConfirm = false
+    @State private var previewEndTime: Date? = {
+        let ts = UserDefaults.standard.double(forKey: "previewEndTime")
+        guard ts > 0 else { return nil }
+        let date = Date(timeIntervalSince1970: ts)
+        return date > Date() ? date : nil
+    }()
 
     var body: some View {
         ZStack {
@@ -22,24 +30,100 @@ struct ContentView: View {
 
             if SabbathSchedule.isSabbathActive() {
                 sabbathActiveView
+            } else if screenTimeManager.isPreviewActive, let endTime = previewEndTime {
+                previewActiveView(endTime: endTime)
             } else {
                 countdownView
             }
         }
         .onReceive(timer) { _ in
             now = Date()
+            if let endTime = previewEndTime, Date() >= endTime {
+                screenTimeManager.stopPreview()
+                previewEndTime = nil
+                UserDefaults.standard.removeObject(forKey: "previewEndTime")
+            }
         }
         .sheet(isPresented: $showBlockedApps) {
-            BlockedAppsSheet()
+            BlockedAppsSheet(screenTimeManager: screenTimeManager)
         }
         .sheet(isPresented: $showFriendsView) {
             FriendsView()
         }
+        .sheet(isPresented: $showAppPicker) {
+            AppSelectionView(screenTimeManager: screenTimeManager)
+        }
+        .alert("Start preview?", isPresented: $showPreviewConfirm) {
+            Button("Start") { beginPreview() }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Your selected apps will be blocked for 1 hour.")
+        }
         .task {
             await fetchCount()
             await fetchConfig()
+
+            // Prompt app selection if sabbath is upcoming and no selection
+            if SabbathSchedule.isUpcoming() && !screenTimeManager.hasSelection {
+                showAppPicker = true
+            }
+
+            // Sabbath day: auto-start or prompt
+            if SabbathSchedule.isSabbathActive() {
+                if screenTimeManager.hasSelection && !screenTimeManager.isBlocking {
+                    screenTimeManager.startBlocking()
+                } else if !screenTimeManager.hasSelection {
+                    showAppPicker = true
+                }
+            }
         }
     }
+
+    // MARK: - Preview
+
+    private func beginPreview() {
+        screenTimeManager.startPreview()
+        let endTime = Date().addingTimeInterval(3600)
+        previewEndTime = endTime
+        UserDefaults.standard.set(endTime.timeIntervalSince1970, forKey: "previewEndTime")
+    }
+
+    private func previewActiveView(endTime: Date) -> some View {
+        VStack(spacing: 0) {
+            Spacer()
+
+            Text("Preview active")
+                .font(.system(size: 32, weight: .thin, design: .serif))
+                .foregroundColor(.black)
+                .padding(.bottom, 16)
+
+            let remaining = Calendar.current.dateComponents(
+                [.minute, .second],
+                from: now,
+                to: endTime
+            )
+            let mins = max(0, remaining.minute ?? 0)
+            let secs = max(0, remaining.second ?? 0)
+
+            Text(String(format: "%02d:%02d", mins, secs))
+                .font(.system(size: 44, weight: .bold, design: .monospaced))
+                .foregroundColor(.black)
+                .padding(.bottom, 12)
+
+            Text("remaining")
+                .font(.system(size: 17, weight: .regular, design: .serif))
+                .foregroundColor(.black.opacity(0.4))
+                .padding(.bottom, 24)
+
+            Text("Enjoy a mini digital sabbath.")
+                .font(.system(size: 17, weight: .regular, design: .serif))
+                .foregroundColor(.black.opacity(0.5))
+
+            Spacer()
+        }
+    }
+
+    // MARK: - Network
 
     private func fetchCount() async {
         guard let url = URL(string: "\(Self.apiBase)/count") else { return }
@@ -67,6 +151,8 @@ struct ContentView: View {
             os_log("Failed to fetch config: %{public}@", type: .error, error.localizedDescription)
         }
     }
+
+    // MARK: - Sabbath Active
 
     private var sabbathEndOfDay: Date {
         let calendar = Calendar.current
@@ -118,19 +204,10 @@ struct ContentView: View {
         }
     }
 
+    // MARK: - Countdown
+
     private var countdownView: some View {
         VStack(spacing: 0) {
-            HStack {
-                Spacer()
-                Button(action: { showBlockedApps = true }) {
-                    Image(systemName: "info.circle")
-                        .font(.system(size: 22))
-                        .foregroundColor(.black.opacity(0.4))
-                }
-                .padding(.trailing, 24)
-                .padding(.top, 16)
-            }
-
             Spacer()
 
             Image("BackgroundImage")
@@ -177,42 +254,51 @@ struct ContentView: View {
                 .padding(.horizontal, 40)
                 .padding(.bottom, 16)
 
-            HStack(spacing: 12) {
+            VStack(spacing: 10) {
                 ShareLink(item: "I'm committing to a day of digital sabbath on June 21, 2026. You can join me by downloading Digital Sabbath: \(shareURL)") {
-                    HStack(spacing: 6) {
-                        Image(systemName: "square.and.arrow.up")
-                            .font(.system(size: 12))
-                        Text("Share")
-                            .font(.system(size: 13, weight: .medium))
-                    }
-                    .foregroundColor(.black.opacity(0.6))
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(Color.black.opacity(0.08))
-                    .cornerRadius(16)
+                    Text("Share")
+                        .font(.system(size: 13, weight: .medium, design: .serif))
+                        .foregroundColor(.black.opacity(0.6))
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        .background(Color.black.opacity(0.08))
+                        .cornerRadius(16)
                 }
 
-                if !discordURL.isEmpty, let url = URL(string: discordURL) {
-                    Button(action: {
-                        UIApplication.shared.open(url)
-                    }) {
-                        HStack(spacing: 6) {
-                            Image(systemName: "bubble.left.fill")
-                                .font(.system(size: 12))
-                            Text("Discord")
-                                .font(.system(size: 13, weight: .medium))
-                        }
-                        .foregroundColor(Color(red: 0.34, green: 0.40, blue: 0.95))
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(Color(red: 0.34, green: 0.40, blue: 0.95).opacity(0.12))
+                Button(action: {
+                    showBlockedApps = true
+                }) {
+                    Text("Edit blocked apps")
+                        .font(.system(size: 13, weight: .medium, design: .serif))
+                        .foregroundColor(.black.opacity(0.6))
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        .background(Color.black.opacity(0.08))
                         .cornerRadius(16)
+                }
+
+                Button(action: {
+                    if screenTimeManager.isAuthorized && screenTimeManager.hasSelection {
+                        showPreviewConfirm = true
+                    } else {
+                        showAppPicker = true
                     }
+                }) {
+                    Text("Preview for 1 hour")
+                        .font(.system(size: 13, weight: .medium, design: .serif))
+                        .foregroundColor(.black.opacity(0.6))
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        .background(Color.black.opacity(0.08))
+                        .cornerRadius(16)
                 }
             }
+            .padding(.horizontal, 40)
             .padding(.bottom, 60)
         }
     }
+
+    // MARK: - Helpers
 
     private func countdownString(from components: DateComponents) -> String {
         let d = max(0, components.day ?? 0)

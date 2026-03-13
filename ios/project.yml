@@ -34,42 +34,21 @@ targets:
         GENERATE_INFOPLIST_FILE: NO
     attributes:
       SystemCapabilities:
-        com.apple.NetworkExtensions:
+        com.apple.developer.family-controls:
           enabled: 1
         com.apple.ApplicationGroups.iOS:
           enabled: 1
         com.apple.Push:
           enabled: 1
-    dependencies:
-      - target: PacketTunnel
-
-  PacketTunnel:
-    type: app-extension
-    platform: iOS
-    sources:
-      - PacketTunnel
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.digitalsabbath.app.PacketTunnel
-        INFOPLIST_FILE: PacketTunnel/Info.plist
-        CODE_SIGN_ENTITLEMENTS: PacketTunnel/PacketTunnel.entitlements
-        GENERATE_INFOPLIST_FILE: NO
-        SKIP_INSTALL: YES
-        MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: 3
-    attributes:
-      SystemCapabilities:
-        com.apple.NetworkExtensions:
-          enabled: 1
-        com.apple.ApplicationGroups.iOS:
-          enabled: 1
+    # TODO: Re-add DeviceActivityMonitor extension once Family Controls entitlement is approved
+    # dependencies:
+    #   - target: DeviceActivityMonitor
 
 schemes:
   Sabbath:
     build:
       targets:
         Sabbath: all
-        PacketTunnel: all
     run:
       config: Debug
       executable: Sabbath

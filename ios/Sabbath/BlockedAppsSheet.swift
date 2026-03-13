@@ -1,57 +1,42 @@
 import SwiftUI
+import FamilyControls
 
 struct BlockedAppsSheet: View {
+    @ObservedObject var screenTimeManager: ScreenTimeManager
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
         NavigationView {
-            List {
-                Section(header: Text("Social Media")) {
-                    blockedAppRow("Instagram", domain: "instagram.com")
-                    blockedAppRow("TikTok", domain: "tiktok.com")
-                    blockedAppRow("Twitter / X", domain: "x.com")
-                    blockedAppRow("Facebook", domain: "facebook.com")
-                    blockedAppRow("Reddit", domain: "reddit.com")
-                    blockedAppRow("Snapchat", domain: "snapchat.com")
-                    blockedAppRow("Threads", domain: "threads.net")
-                    blockedAppRow("Bluesky", domain: "bsky.app")
+            VStack(spacing: 0) {
+                if screenTimeManager.hasSelection {
+                    let appCount = screenTimeManager.activitySelection.applicationTokens.count
+                    let catCount = screenTimeManager.activitySelection.categoryTokens.count
+
+                    Text("\(appCount) app\(appCount == 1 ? "" : "s") and \(catCount) categor\(catCount == 1 ? "y" : "ies") selected")
+                        .font(.system(size: 15, weight: .regular, design: .serif))
+                        .foregroundColor(.black.opacity(0.5))
+                        .padding(.top, 20)
+                        .padding(.bottom, 8)
+                } else {
+                    Text("No apps selected yet")
+                        .font(.system(size: 15, weight: .regular, design: .serif))
+                        .foregroundColor(.black.opacity(0.5))
+                        .padding(.top, 20)
+                        .padding(.bottom, 8)
                 }
-                Section(header: Text("Dating")) {
-                    blockedAppRow("Hinge", domain: "hinge.co")
-                    blockedAppRow("Tinder", domain: "tinder.com")
-                    blockedAppRow("Bumble", domain: "bumble.com")
-                }
-                Section(header: Text("Gambling")) {
-                    blockedAppRow("Kalshi", domain: "kalshi.com")
-                    blockedAppRow("Polymarket", domain: "polymarket.com")
-                }
-                Section(header: Text("AI")) {
-                    blockedAppRow("ChatGPT", domain: "chatgpt.com")
-                    blockedAppRow("Gemini", domain: "gemini.google.com")
-                    blockedAppRow("Claude", domain: "claude.ai")
-                }
-                Section(footer: Text("Apps will still open, but feeds and content won't load.")) {
-                    EmptyView()
-                }
+
+                FamilyActivityPicker(selection: $screenTimeManager.activitySelection)
             }
             .navigationTitle("Blocked Apps")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") { dismiss() }
+                    Button("Done") {
+                        screenTimeManager.saveSelection()
+                        dismiss()
+                    }
                 }
             }
-        }
-    }
-
-    private func blockedAppRow(_ name: String, domain: String) -> some View {
-        HStack {
-            Text(name)
-                .font(.system(size: 16))
-            Spacer()
-            Text(domain)
-                .font(.system(size: 13, design: .monospaced))
-                .foregroundColor(.secondary)
         }
     }
 }
