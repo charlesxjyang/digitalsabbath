@@ -8,24 +8,26 @@ struct AboutSheet: View {
             VStack(spacing: 24) {
                 Spacer()
 
-                Text("Made with care by Charles Yang.")
-                    .font(.system(size: 17, weight: .regular, design: .serif))
-                    .foregroundColor(.black.opacity(0.65))
-                    .multilineTextAlignment(.center)
+                HStack(spacing: 0) {
+                    Text("Made with care by ")
+                        .font(.system(size: 17, weight: .regular, design: .serif))
+                        .foregroundColor(.black.opacity(0.65))
+                    Link("Charles Yang", destination: URL(string: "https://charlesyang.io/")!)
+                        .font(.system(size: 17, weight: .regular, design: .serif))
+                    Text(".")
+                        .font(.system(size: 17, weight: .regular, design: .serif))
+                        .foregroundColor(.black.opacity(0.65))
+                }
 
-                Text("Fully open source on GitHub.")
-                    .font(.system(size: 17, weight: .regular, design: .serif))
-                    .foregroundColor(.black.opacity(0.65))
-                    .multilineTextAlignment(.center)
-
-                Link(destination: URL(string: "https://github.com/charlesxjyang/digitalsabbath")!) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "link")
-                            .font(.system(size: 13))
-                        Text("github.com/charlesxjyang/digitalsabbath")
-                            .font(.system(size: 14, weight: .medium, design: .monospaced))
-                    }
-                    .foregroundColor(.blue.opacity(0.8))
+                HStack(spacing: 0) {
+                    Text("Fully open source on ")
+                        .font(.system(size: 17, weight: .regular, design: .serif))
+                        .foregroundColor(.black.opacity(0.65))
+                    Link("GitHub", destination: URL(string: "https://github.com/charlesxjyang/digitalsabbath")!)
+                        .font(.system(size: 17, weight: .regular, design: .serif))
+                    Text(".")
+                        .font(.system(size: 17, weight: .regular, design: .serif))
+                        .foregroundColor(.black.opacity(0.65))
                 }
 
                 Spacer()

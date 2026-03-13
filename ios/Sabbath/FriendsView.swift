@@ -57,7 +57,7 @@ struct FriendsView: View {
                 .font(.system(size: 28, weight: .thin, design: .serif))
                 .foregroundColor(.black)
 
-            Text("Enter your phone number so friends can find you. It's hashed on your device — we never see it.")
+            Text("Enter your phone number so friends can find you. We will never text you.")
                 .font(.system(size: 15, weight: .regular, design: .serif))
                 .foregroundColor(.black.opacity(0.5))
                 .multilineTextAlignment(.center)

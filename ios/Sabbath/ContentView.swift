@@ -16,6 +16,7 @@ struct ContentView: View {
     @State private var showFriendsView = false
     @State private var showAppPicker = false
     @State private var showPreviewConfirm = false
+    @State private var showAbout = false
     @State private var previewEndTime: Date? = {
         let ts = UserDefaults.standard.double(forKey: "previewEndTime")
         guard ts > 0 else { return nil }
@@ -52,6 +53,9 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showAppPicker) {
             AppSelectionView(screenTimeManager: screenTimeManager)
+        }
+        .sheet(isPresented: $showAbout) {
+            AboutSheet()
         }
         .alert("Start preview?", isPresented: $showPreviewConfirm) {
             Button("Start") { beginPreview() }
@@ -208,6 +212,17 @@ struct ContentView: View {
 
     private var countdownView: some View {
         VStack(spacing: 0) {
+            HStack {
+                Spacer()
+                Button(action: { showAbout = true }) {
+                    Image(systemName: "info.circle")
+                        .font(.system(size: 22))
+                        .foregroundColor(.black.opacity(0.4))
+                }
+                .padding(.trailing, 24)
+                .padding(.top, 16)
+            }
+
             Spacer()
 
             Image("BackgroundImage")

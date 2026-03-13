@@ -181,12 +181,6 @@ struct OnboardingView: View {
                 .padding(.horizontal, 40)
                 .padding(.bottom, 16)
 
-            Text("We will never text you.")
-                .font(.system(size: 15, weight: .regular, design: .serif))
-                .foregroundColor(.black.opacity(0.4))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 40)
-
             Spacer()
 
             Button(action: {
