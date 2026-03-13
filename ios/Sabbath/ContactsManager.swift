@@ -20,7 +20,16 @@ enum ContactsManager {
         }
     }
 
-    static func fetchContactPhoneHashes() -> [ContactMatch] {
+    static func fetchContactPhoneHashes() async -> [ContactMatch] {
+        await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated).async {
+                let results = _fetchContactPhoneHashes()
+                continuation.resume(returning: results)
+            }
+        }
+    }
+
+    private static func _fetchContactPhoneHashes() -> [ContactMatch] {
         let store = CNContactStore()
         let keys: [CNKeyDescriptor] = [
             CNContactGivenNameKey as CNKeyDescriptor,
