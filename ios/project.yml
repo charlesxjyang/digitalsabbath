@@ -30,7 +30,7 @@ targets:
         INFOPLIST_KEY_UIRequiresFullScreen: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
         MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: 3
+        CURRENT_PROJECT_VERSION: 5
         GENERATE_INFOPLIST_FILE: NO
     attributes:
       SystemCapabilities:
@@ -40,9 +40,28 @@ targets:
           enabled: 1
         com.apple.Push:
           enabled: 1
-    # TODO: Re-add DeviceActivityMonitor extension once Family Controls entitlement is approved
-    # dependencies:
-    #   - target: DeviceActivityMonitor
+    dependencies:
+      - target: DeviceActivityMonitor
+
+  DeviceActivityMonitor:
+    type: app-extension
+    platform: iOS
+    sources:
+      - DeviceActivityMonitor
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.digitalsabbath.app.DeviceActivityMonitor
+        INFOPLIST_FILE: DeviceActivityMonitor/Info.plist
+        CODE_SIGN_ENTITLEMENTS: DeviceActivityMonitor/DeviceActivityMonitor.entitlements
+        GENERATE_INFOPLIST_FILE: NO
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: 5
+    attributes:
+      SystemCapabilities:
+        com.apple.developer.family-controls:
+          enabled: 1
+        com.apple.ApplicationGroups.iOS:
+          enabled: 1
 
 schemes:
   Sabbath:

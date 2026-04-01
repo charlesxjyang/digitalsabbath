@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: #f5f0e8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Playfair Display', Georgia, serif;
+            color: #1a1a1a;
+            overflow: hidden;
+        }
+        .status-bar { width: 100%; height: 120px; }
+        .info-btn {
+            align-self: flex-end;
+            margin-right: 60px;
+            margin-top: 20px;
+            font-size: 32px;
+            color: rgba(26,26,26,0.4);
+        }
+        .spacer { flex: 1; }
+        h1 {
+            font-size: 76px;
+            font-weight: 100;
+            margin-bottom: 48px;
+        }
+        .remaining {
+            font-family: 'Inter', sans-serif;
+            font-size: 108px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 28px;
+        }
+        .remaining-label {
+            font-size: 40px;
+            font-weight: 400;
+            color: rgba(26,26,26,0.4);
+            margin-bottom: 56px;
+        }
+        .message {
+            font-size: 46px;
+            font-weight: 400;
+            color: rgba(26,26,26,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="status-bar"></div>
+    <div class="info-btn">&oplus;</div>
+    <div class="spacer"></div>
+
+    <h1>Sabbath is active.</h1>
+    <div class="remaining">16:32:08</div>
+    <div class="remaining-label">remaining</div>
+    <div class="message">Be present.</div>
+
+    <div class="spacer"></div>
+</body>
+</html>
